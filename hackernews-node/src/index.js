@@ -1,18 +1,10 @@
 const { ApolloServer } = require('apollo-server');
 const { PrismaClient } = require('@prisma/client');
 
+const fs = require('fs');
+const path = require('path');
 
-const prisma = new PrismaClient();
-const server = new ApolloServer({
-  typeDefs: fs.readFileSync(
-    path.join (__dirname, 'schema.graphql'), 
-    'utf8'
-  ),
-  resolvers,
-  context:{
-    prisma,
-  }
-})
+
 
 const resolvers = {
     Query: {
@@ -45,6 +37,7 @@ const resolvers = {
       }, 
   
       deleteLink: (parent, args, context) => {
+
         const deletedLink = context.prisma.link.delete({
           where: {id: args.id}
         })
@@ -55,8 +48,18 @@ const resolvers = {
 
 // 3
 
-const fs = require('fs');
-const path = require('path');
+
+const prisma = new PrismaClient();
+const server = new ApolloServer({
+  typeDefs: fs.readFileSync(
+    path.join (__dirname, 'schema.graphql'), 
+    'utf8'
+  ),
+  resolvers,
+  context:{
+    prisma,
+  }
+})
 
 
 server
