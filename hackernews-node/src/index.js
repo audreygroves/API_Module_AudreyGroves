@@ -10,7 +10,11 @@ let links = [{
 const resolvers = {
     Query: {
       info: () => `This is the API of a Hackernews Clone`,
-      feed: () => links
+      feed: () => links,
+      link: (parent, args) => {
+        const linkIndex = links.findIndex((link) => link.id === args.id)
+        return links[linkIndex];
+      }
     },
     Mutation: {
       // 2
